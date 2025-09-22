@@ -24,7 +24,9 @@ This will:
 * spin up [Prometheus on port `9090`](http://localhost:9090/)
 * spin up [Grafana on port `3000`](http://localhost:3000/)
   * use `admin` user and a specified password to log in
-* instruct Prometheus to scrape metrics from itself every 15 seconds.
+* instruct Prometheus to scrape metrics from itself every 15 seconds
+* spin up a [Rack app on port `9292`](http://localhost:9292/)
+* instruct Prometheus to scrape metrics from the Rack app every 15 seconds.
 
 ## Connect Grafana to Prometheus
 

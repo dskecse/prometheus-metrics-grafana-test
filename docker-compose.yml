@@ -1,4 +1,17 @@
 services:
+  app:
+    build:
+      context: ./rack-app
+    volumes:
+      - ./rack-app:/app
+      - bin-cache:/usr/local/bin
+      - bundle-cache:/usr/local/bundle
+    ports:
+      - 9292:9292
+    environment:
+      - RACK_ENV=${RACK_ENV}
+      - PORT=${PORT}
+
   prometheus:
     image: prom/prometheus:v3.6.0
     container_name: prometheus
@@ -25,4 +38,8 @@ services:
 
 volumes:
   grafana-storage:
+    driver: local
+  bin-cache:
+    driver: local
+  bundle-cache:
     driver: local
