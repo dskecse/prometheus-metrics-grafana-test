@@ -26,6 +26,9 @@ This will:
   * use `admin` user and a specified password to log in
 * instruct Prometheus to scrape metrics from itself every 15 seconds
 * spin up a [Rack app on port `9292`](http://localhost:9292/)
+* expose a `/metrics` endpoint on the Rack app to be scraped by Prometheus
+* register a `test_requests_total` counter metric with Prometheus
+* increment a newly created counter metric on `http://localhost:9292/test` requests
 * instruct Prometheus to scrape metrics from the Rack app every 15 seconds.
 
 ## Connect Grafana to Prometheus
