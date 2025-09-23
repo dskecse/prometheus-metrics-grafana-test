@@ -11,6 +11,8 @@ services:
     environment:
       - RACK_ENV=${RACK_ENV}
       - PORT=${PORT}
+    stdin_open: true
+    tty: true
 
   prometheus:
     image: prom/prometheus:v3.6.0
