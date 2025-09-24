@@ -115,7 +115,61 @@ outputs the value around `1`:
 {cache="false", http_status_code="200", instance="app:9292", job="rack-app", url="http://localhost:9292/test"}	1.051789703159926
 ```
 
-3. TODO: Test the difference between `$__range`, `$__interval`, `$__rate_interval` and `$__range_interval` global built-in variables on Grafana dashboards.
+3. Test the difference between `$__range`, `$__interval`, `$__rate_interval` and `$__range_interval` global built-in variables on Grafana dashboards.
+
+* https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/#global-variables
+
+1. `$__interval` variable is calculated using the time range and the width of the graph (the number of pixels).
+Approximate calculation: `(to - from) / resolution`.
+2. `$__range` variable represents the range for the current dashboard. It is calculated as `to - from`.
+It is represented in seconds.
+3. `$__rate_interval` variable is meant to be used in the `rate` function, see below.
+4. `$__range_interval` variable seems to be missing from Grafana docs.
+
+Example values for the same Grafana dashboard:
+
+* `$__rate_interval`: `60` (seconds, basically `4 * scrape_interval` or `4 * 15s`)
+* `$__interval`: `30`
+* `$__range`: `21600` (when the time range on Grafana UI is `Last 6 hours`)
+* `$__range_interval`: `21600s_` (when the time range is as above)
+
+* https://grafana.com/docs/grafana/latest/datasources/prometheus/template-variables/#use-interval-and-range-variables
+* https://grafana.com/docs/grafana/latest/datasources/prometheus/template-variables/#use-__rate_interval
+
+> Grafana recommends using `$__rate_interval` with the `rate` and `increase` functions
+> instead of `$__interval` or a fixed interval value. Since `$__rate_interval` is always
+> at least four times the scrape interval, it helps avoid issues specific to Prometheus,
+> such as gaps or inaccuracies in query results.
+
+For example, instead of using the following:
+
+```
+rate(http_requests_total[5m])
+```
+
+or:
+
+```
+rate(http_requests_total[$__interval])
+```
+
+Use the following:
+
+```
+rate(http_requests_total[$__rate_interval])
+```
+
+The value of `$__rate_interval` is calculated as:
+
+```
+max($__interval + scrape_interval, 4 * scrape_interval)
+```
+
+> Here, `scrape_interval` refers to the `min step` setting (also known as `query_interval`)
+> specified per PromQL query, if set. If not, Grafana falls back to the Prometheus data source's
+> scrape interval setting (usually `15s`).
+
+* https://grafana.com/blog/2020/09/28/new-in-grafana-7.2-__rate_interval-for-prometheus-rate-queries-that-just-work/
 
 ## Helpful Links
 
