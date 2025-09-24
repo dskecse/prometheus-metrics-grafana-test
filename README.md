@@ -117,14 +117,19 @@ outputs the value around `1`:
 
 3. Test the difference between `$__range`, `$__interval`, `$__rate_interval` and `$__range_interval` global built-in variables on Grafana dashboards.
 
+* https://stackoverflow.com/questions/63262544/is-anybody-using-interval-for-range-selection-over-fixed-values
+
+> The `$__interval` is useful for graphs which may be zoomed in / zoomed out.
+> In this case Grafana automatically adjusts `$__interval` for the current zoom level.
+
 * https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/#global-variables
 
-1. `$__interval` variable is calculated using the time range and the width of the graph (the number of pixels).
+* `$__interval` variable is calculated using the time range and the width of the graph (the number of pixels).
 Approximate calculation: `(to - from) / resolution`.
-2. `$__range` variable represents the range for the current dashboard. It is calculated as `to - from`.
+* `$__range` variable represents the range for the current dashboard. It is calculated as `to - from`.
 It is represented in seconds.
-3. `$__rate_interval` variable is meant to be used in the `rate` function, see below.
-4. `$__range_interval` variable seems to be missing from Grafana docs.
+* `$__rate_interval` variable is meant to be used in the `rate` function, see below.
+* `$__range_interval` variable seems to be missing from Grafana docs.
 
 Example values for the same Grafana dashboard:
 
@@ -170,6 +175,9 @@ max($__interval + scrape_interval, 4 * scrape_interval)
 > scrape interval setting (usually `15s`).
 
 * https://grafana.com/blog/2020/09/28/new-in-grafana-7.2-__rate_interval-for-prometheus-rate-queries-that-just-work/
+
+> `$__rate_interval` extends the usual `$__interval` by one scrape interval so that the ranges overlap just enough
+> to ensure complete coverage of all counter increases.
 
 ## Helpful Links
 
