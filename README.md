@@ -57,6 +57,9 @@ increase(test_requests_total[$__range])
 * click `Save dashboard`
 * experiment with setting different time ranges on the Grafana UI, e.g. `Last 3 hours`, `Last 24 hours`.
 
+NOTE: Grafana will show up the number of increases of the counter metric over a specified time range.
+If you see a decreasing graph somewhere on the stat visualization then be aware these values won't be counted.
+
 ## Test Assumptions
 
 1. Make a few calls to the `/test` endpoint and check to see if the absolute increase of the `test_requests_total` counter over last hour matches that number regardless of the app/container restarts.
