@@ -79,7 +79,24 @@ which tells us how much the counter has increased by over a period of time.
 `rate()`, `irate()`, `increase()` functions only work for counter metrics,
 since they treat any value decrease as a counter reset and can only output non-negative results.
 
-2. TODO: Test the difference between `$__range`, `$__interval`, `$__rate_interval` and `$__range_interval` global built-in variables on Grafana dashboards.
+2. Making 2 calls to the `/test` endpoint within a minute shows the `test_requests_total` counter value increased by `2` in the `/metrics` endpoint.
+
+And Prometheus counts both calls when making the following PromQL query:
+```
+increase(test_requests_total[24h])
+```
+
+but the same query with a `1h` (or e.g. `6h`) range:
+```
+increase(test_requests_total[1h])
+```
+
+outputs the value around `1`:
+```
+{cache="false", http_status_code="200", instance="app:9292", job="rack-app", url="http://localhost:9292/test"}	1.051789703159926
+```
+
+3. TODO: Test the difference between `$__range`, `$__interval`, `$__rate_interval` and `$__range_interval` global built-in variables on Grafana dashboards.
 
 ## Helpful Links
 
