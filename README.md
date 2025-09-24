@@ -41,6 +41,22 @@ This involves configuring Prometheus as a data source:
 * enter the `Prometheus server URL`: `http://prometheus:9090`
 * and click `Save & Test` to verify the connection.
 
+It also involves building a dashboard to display meaningful insights:
+
+* head over to Grafana's [New dashboard](http://localhost:3000/dashboard/new) page
+* click the `Add visualization` button
+* select `Prometheus` from the data source dropdown
+* choose `Stat` as a visualization type
+* type in `Test requests count over time range` as a title
+* choose `Last *` as a calculation
+* optionally set `Decimals` to `0` to display floating-point numbers as integers
+* inside the `Queries -> Metrics browser` type in the following query:
+```
+increase(test_requests_total[$__range])
+```
+* click `Save dashboard`
+* experiment with setting different time ranges on the Grafana UI, e.g. `Last 3 hours`, `Last 24 hours`.
+
 ## Test Assumptions
 
 1. Make a few calls to the `/test` endpoint and check to see if the absolute increase of the `test_requests_total` counter over last hour matches that number regardless of the app/container restarts.
